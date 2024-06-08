@@ -44,9 +44,15 @@ fun HomeScreen() {
 
         Button(onClick = {
 
-            listSanphams = listSanphams.toMutableList().apply {
-                add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
-            }
+            val temps = listSanphams.toMutableList() // tao ban sao list
+            temps.add(SanPham(5, 9f, "SP 5", "mo ta 5", true)) // add du lieu
+
+            listSanphams = temps
+
+//            listSanphams = listSanphams.toMutableList().apply {
+//                add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
+//            }
+
 
         }) {
             Text(text = "Them san pham")
