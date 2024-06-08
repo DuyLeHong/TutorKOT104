@@ -7,8 +7,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
@@ -85,12 +87,12 @@ fun HomeScreen() {
                         ItemText(content = it.status.toString())
                     }
 
-                    Column {
-                        Image(painter = painterResource(id = android.R.drawable.ic_menu_edit), contentDescription = "", Modifier.clickable {
+                    Column (Modifier.fillMaxHeight(), verticalArrangement = Arrangement.spacedBy(10.dp)){
+                        Image(painter = painterResource(id = android.R.drawable.ic_menu_edit), contentDescription = "", Modifier.width(15.dp).clickable {
 
                         })
 
-                        Image(painter = painterResource(id = android.R.drawable.ic_menu_delete), contentDescription = "", Modifier.clickable {
+                        Image(painter = painterResource(id = android.R.drawable.ic_menu_delete), contentDescription = "", Modifier.width(15.dp).clickable {
                             val temps = listSanphams.toMutableList() // tao ban sao list
                             temps.remove(it)
 
