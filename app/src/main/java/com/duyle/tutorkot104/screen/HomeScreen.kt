@@ -30,13 +30,9 @@ import org.w3c.dom.Text
 @Composable
 fun HomeScreen() {
 
-    //val defaultLists = getListSanpham()
-
     var listSanphams by remember {
         mutableStateOf(getListSanpham())
     }
-
-    //listSanphams = getListSanpham()
 
     val context = LocalContext.current
 
@@ -47,14 +43,10 @@ fun HomeScreen() {
         Text(text = "Quan ly san pham", style = MaterialTheme.typography.titleLarge)
 
         Button(onClick = {
-//            val newlist = getListSanpham()
-//            newlist.add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
 
-            val list2 = mutableListOf<SanPham>()
-            list2.addAll(getListSanpham())
-            list2.add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
-
-            listSanphams = list2
+            listSanphams = listSanphams.toMutableList().apply {
+                add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
+            }
 
         }) {
             Text(text = "Them san pham")

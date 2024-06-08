@@ -7,7 +7,7 @@ data class SanPham (var id : Int, var price : Float, var name : String, var desc
     }
 }
 
-fun getListSanpham () : List<SanPham> {
+fun getListSanpham () : MutableList<SanPham> {
     val lists = mutableListOf<SanPham>()
 
     lists.add(SanPham(1, 10f, "San pham 1", "", true))
