@@ -1,6 +1,8 @@
 package com.duyle.tutorkot104.screen
 
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,7 +23,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.duyle.tutorkot104.R
 import com.duyle.tutorkot104.entity.SanPham
 import com.duyle.tutorkot104.entity.getListSanpham
 import org.w3c.dom.Text
@@ -79,6 +83,19 @@ fun HomeScreen() {
                     Column {
                         ItemText(content = it.description.toString())
                         ItemText(content = it.status.toString())
+                    }
+
+                    Column {
+                        Image(painter = painterResource(id = android.R.drawable.ic_menu_edit), contentDescription = "", Modifier.clickable {
+
+                        })
+
+                        Image(painter = painterResource(id = android.R.drawable.ic_menu_delete), contentDescription = "", Modifier.clickable {
+                            val temps = listSanphams.toMutableList() // tao ban sao list
+                            temps.remove(it)
+
+                            listSanphams = temps
+                        })
                     }
                 }
 
