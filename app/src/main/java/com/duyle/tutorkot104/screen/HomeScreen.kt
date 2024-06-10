@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,9 +16,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -27,6 +31,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -34,6 +39,9 @@ import androidx.compose.ui.window.Dialog
 import com.duyle.tutorkot104.entity.SanPham
 import com.duyle.tutorkot104.entity.getListSanpham
 
+//var listSanphams : MutableList<SanPham> = mutableListOf()
+
+var sanPhamTemp: SanPham = SanPham(name = "", price = 0f, description = "", status = false)
 
 @Composable
 fun HomeScreen() {
@@ -78,6 +86,52 @@ fun HomeScreen() {
             })
     }
 
+    var showDialogThemSanPham by remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialogThemSanPham) {
+        ShowDialogThemSuaSP(
+            title = "Them SP",
+            onDismiss = { showDialogThemSanPham = false },
+            onConfirm = {
+                listSanphams = listSanphams.toMutableList().apply {
+                    add(sanPhamTemp.copy())
+
+                    showDialogThemSanPham = false
+                }
+            })
+    }
+
+    var showDialogSuaSanPham by remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialogSuaSanPham) {
+        ShowDialogThemSuaSP(
+            title = "Sua SP",
+            sanPham = sp,
+            onDismiss = { showDialogSuaSanPham = false },
+            onConfirm = {
+                listSanphams = listSanphams.toMutableList().apply {
+                    val index = listSanphams.indexOf(sanPhamTemp.copy())
+
+                    if (index != -1) {
+                        listSanphams = listSanphams.toMutableList().apply {
+                            var sanPham : SanPham = get(index)
+
+                            sanPham = sanPhamTemp.copy()
+                        }
+                    }
+
+                    showDialogSuaSanPham = false
+
+                }
+            })
+    }
+
+
+
     Column(
         Modifier
             .fillMaxSize()
@@ -87,10 +141,12 @@ fun HomeScreen() {
 
         Button(onClick = {
 
-            val temps = listSanphams.toMutableList() // tao ban sao list
-            temps.add(SanPham(5, 9f, "SP 5", "mo ta 5", true)) // add du lieu
+            showDialogThemSanPham = true
 
-            listSanphams = temps
+//            val temps = listSanphams.toMutableList() // tao ban sao list
+//            temps.add(SanPham(5, 9f, "SP 5", "mo ta 5", true)) // add du lieu
+//
+//            listSanphams = temps
 
 //            listSanphams = listSanphams.toMutableList().apply {
 //                add(SanPham(5, 9f, "SP 5", "mo ta 5", true))
@@ -136,7 +192,9 @@ fun HomeScreen() {
                             Modifier
                                 .width(15.dp)
                                 .clickable {
-
+                                    sp = it
+                                    sanPhamTemp = it
+                                    showDialogSuaSanPham = true
                                 })
 
                         Image(painter = painterResource(id = android.R.drawable.ic_menu_delete),
@@ -155,6 +213,161 @@ fun HomeScreen() {
         }
     }
 }
+
+@Composable
+fun ShowDialogThemSuaSP(
+    title: String,
+    sanPham: SanPham? = null,
+    onConfirm: () -> Unit = {},
+    onDismiss: () -> Unit = {}
+) {
+
+    var tenSanPham by remember {
+        mutableStateOf("")
+    }
+
+    var giaSanPham by remember {
+        mutableStateOf("")
+    }
+
+    var motaSanPham by remember {
+        mutableStateOf("")
+    }
+
+    var statusSanPham by remember {
+        mutableStateOf("")
+    }
+
+    if (sanPham != null) {
+        tenSanPham = sanPham.name
+        giaSanPham = sanPham.price.toString()
+        motaSanPham = sanPham.description.toString()
+        statusSanPham = sanPham.status.toString()
+    }
+
+    Dialog(onDismissRequest = { }) {
+
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = Color.White,
+            ),
+            modifier = Modifier.fillMaxWidth(),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            )
+        ) {
+            Column(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp)
+            ) {
+                Text(text = title, style = MaterialTheme.typography.titleLarge)
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+
+                    OutlinedTextField(
+                        value = tenSanPham,
+                        onValueChange = { tenSanPham = it },
+                        label = { Text(text = "Ten SP") },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    OutlinedTextField(
+                        value = giaSanPham,
+                        onValueChange = { giaSanPham = it },
+                        label = { Text(text = "Gia SP") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+
+                    OutlinedTextField(
+                        value = motaSanPham,
+                        onValueChange = { motaSanPham = it },
+                        label = { Text(text = "Mo ta") },
+                        modifier = Modifier.weight(1f)
+                    )
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    OutlinedTextField(
+                        value = statusSanPham,
+                        onValueChange = { statusSanPham = it },
+                        label = { Text(text = "Trang thai") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+                ) {
+                    Button(onClick = {
+
+                        sanPhamTemp.apply {
+                            name = tenSanPham
+                            price = giaSanPham.toFloat()
+                            description = motaSanPham
+                            status = statusSanPham.toBoolean()
+                        }
+
+                        onConfirm()
+
+//                        if (sanPham == null) { // them sp
+//                            sanPhamTemp = SanPham(name = tenSanPham, price = giaSanPham.toFloat(), description = motaSanPham, status = statusSanPham.toBoolean())
+//
+////                            listSanphams = listSanphams.toMutableList().apply {
+////                                add(newSP)
+////                            }
+//
+//                        } else { // sua sp
+//
+//                            sanPhamTemp?.apply {
+//                                name = tenSanPham
+//                                price = giaSanPham.toFloat()
+//                                description = motaSanPham
+//                                status = statusSanPham.toBoolean()
+//                            }
+////                            listSanphams = listSanphams.toMutableList().apply {
+////                                val index = this.indexOf(sanPham)
+////                                this.get(index).apply {
+////                                    name = tenSanPham
+////                                    price = giaSanPham.toFloat()
+////                                    description = motaSanPham
+////                                    status = statusSanPham.toBoolean()
+////                                }
+////                            }
+//
+//                        }
+                    }) {
+                        Text(text = "Luu")
+                    }
+
+                    Spacer(modifier = Modifier.width(10.dp))
+
+                    Button(onClick = onDismiss) {
+                        Text(text = "Cancel")
+                    }
+                }
+
+            }
+        }
+
+    }
+}
+
 
 @Composable
 private fun ShowDialog(

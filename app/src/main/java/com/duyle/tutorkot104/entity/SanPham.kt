@@ -1,6 +1,6 @@
 package com.duyle.tutorkot104.entity
 
-data class SanPham (var id : Int, var price : Float, var name : String, var description : String?, var status: Boolean?){
+data class SanPham (var id : Int = 0, var price : Float, var name : String, var description : String?, var status: Boolean?){
 
     override fun toString(): String {
         return "SanPham(price=$price, name='$name', description=$description, status=$status)"
