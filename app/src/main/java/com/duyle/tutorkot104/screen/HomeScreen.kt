@@ -114,19 +114,15 @@ fun HomeScreen() {
             onDismiss = { showDialogSuaSanPham = false },
             onConfirm = {
                 listSanphams = listSanphams.toMutableList().apply {
-                    val index = listSanphams.indexOf(sanPhamTemp.copy())
+                    val index = listSanphams.indexOf(sp)
 
                     if (index != -1) {
-                        listSanphams = listSanphams.toMutableList().apply {
-                            var sanPham : SanPham = get(index)
 
-                            sanPham = sanPhamTemp.copy()
-                        }
+                        set(index, sanPhamTemp.copy())
                     }
-
-                    showDialogSuaSanPham = false
-
                 }
+
+                showDialogSuaSanPham = false
             })
     }
 
@@ -192,8 +188,8 @@ fun HomeScreen() {
                             Modifier
                                 .width(15.dp)
                                 .clickable {
-                                    sp = it
-                                    sanPhamTemp = it
+                                    sp = it.copy()
+                                    sanPhamTemp = it.copy()
                                     showDialogSuaSanPham = true
                                 })
 
